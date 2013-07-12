@@ -1,0 +1,501 @@
+
+ChristmasKit.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000026e  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000002  00800060  0000026e  00000302  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000008  00800062  00800062  00000304  2**0
+                  ALLOC
+  3 .debug_aranges 00000020  00000000  00000000  00000304  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 0000007b  00000000  00000000  00000324  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000215  00000000  00000000  0000039f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000015a  00000000  00000000  000005b4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000248  00000000  00000000  0000070e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000050  00000000  00000000  00000958  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000118  00000000  00000000  000009a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000000d6  00000000  00000000  00000ac0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000030  00000000  00000000  00000b96  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0e c0       	rjmp	.+28     	; 0x1e <__ctors_end>
+   2:	28 c0       	rjmp	.+80     	; 0x54 <__bad_interrupt>
+   4:	27 c0       	rjmp	.+78     	; 0x54 <__bad_interrupt>
+   6:	26 c0       	rjmp	.+76     	; 0x54 <__bad_interrupt>
+   8:	25 c0       	rjmp	.+74     	; 0x54 <__bad_interrupt>
+   a:	24 c0       	rjmp	.+72     	; 0x54 <__bad_interrupt>
+   c:	23 c0       	rjmp	.+70     	; 0x54 <__bad_interrupt>
+   e:	22 c0       	rjmp	.+68     	; 0x54 <__bad_interrupt>
+  10:	21 c0       	rjmp	.+66     	; 0x54 <__bad_interrupt>
+  12:	20 c0       	rjmp	.+64     	; 0x54 <__bad_interrupt>
+  14:	20 c0       	rjmp	.+64     	; 0x56 <__vector_10>
+  16:	1e c0       	rjmp	.+60     	; 0x54 <__bad_interrupt>
+  18:	1d c0       	rjmp	.+58     	; 0x54 <__bad_interrupt>
+  1a:	1c c0       	rjmp	.+56     	; 0x54 <__bad_interrupt>
+  1c:	1b c0       	rjmp	.+54     	; 0x54 <__bad_interrupt>
+
+0000001e <__ctors_end>:
+  1e:	11 24       	eor	r1, r1
+  20:	1f be       	out	0x3f, r1	; 63
+  22:	cf e5       	ldi	r28, 0x5F	; 95
+  24:	d2 e0       	ldi	r29, 0x02	; 2
+  26:	de bf       	out	0x3e, r29	; 62
+  28:	cd bf       	out	0x3d, r28	; 61
+
+0000002a <__do_copy_data>:
+  2a:	10 e0       	ldi	r17, 0x00	; 0
+  2c:	a0 e6       	ldi	r26, 0x60	; 96
+  2e:	b0 e0       	ldi	r27, 0x00	; 0
+  30:	ee e6       	ldi	r30, 0x6E	; 110
+  32:	f2 e0       	ldi	r31, 0x02	; 2
+  34:	02 c0       	rjmp	.+4      	; 0x3a <.do_copy_data_start>
+
+00000036 <.do_copy_data_loop>:
+  36:	05 90       	lpm	r0, Z+
+  38:	0d 92       	st	X+, r0
+
+0000003a <.do_copy_data_start>:
+  3a:	a2 36       	cpi	r26, 0x62	; 98
+  3c:	b1 07       	cpc	r27, r17
+  3e:	d9 f7       	brne	.-10     	; 0x36 <.do_copy_data_loop>
+
+00000040 <__do_clear_bss>:
+  40:	10 e0       	ldi	r17, 0x00	; 0
+  42:	a2 e6       	ldi	r26, 0x62	; 98
+  44:	b0 e0       	ldi	r27, 0x00	; 0
+  46:	01 c0       	rjmp	.+2      	; 0x4a <.do_clear_bss_start>
+
+00000048 <.do_clear_bss_loop>:
+  48:	1d 92       	st	X+, r1
+
+0000004a <.do_clear_bss_start>:
+  4a:	aa 36       	cpi	r26, 0x6A	; 106
+  4c:	b1 07       	cpc	r27, r17
+  4e:	e1 f7       	brne	.-8      	; 0x48 <.do_clear_bss_loop>
+  50:	6e d0       	rcall	.+220    	; 0x12e <main>
+  52:	0b c1       	rjmp	.+534    	; 0x26a <_exit>
+
+00000054 <__bad_interrupt>:
+  54:	d5 cf       	rjmp	.-86     	; 0x0 <__vectors>
+
+00000056 <__vector_10>:
+void delay_ms(uint16_t x);
+
+//***************************************
+//			Main Code
+//***************************************
+ISR(SIG_OUTPUT_COMPARE0A){
+  56:	1f 92       	push	r1
+  58:	0f 92       	push	r0
+  5a:	0f b6       	in	r0, 0x3f	; 63
+  5c:	0f 92       	push	r0
+  5e:	11 24       	eor	r1, r1
+  60:	2f 93       	push	r18
+  62:	3f 93       	push	r19
+  64:	8f 93       	push	r24
+  66:	9f 93       	push	r25
+  68:	af 93       	push	r26
+  6a:	bf 93       	push	r27
+	cli();
+  6c:	f8 94       	cli
+	
+	
+	if(frame_count < FRAME_DEPTH)frame_count+=1;
+  6e:	80 91 66 00 	lds	r24, 0x0066
+  72:	90 91 67 00 	lds	r25, 0x0067
+  76:	8f 5f       	subi	r24, 0xFF	; 255
+  78:	91 40       	sbci	r25, 0x01	; 1
+  7a:	54 f4       	brge	.+20     	; 0x90 <__vector_10+0x3a>
+  7c:	80 91 66 00 	lds	r24, 0x0066
+  80:	90 91 67 00 	lds	r25, 0x0067
+  84:	01 96       	adiw	r24, 0x01	; 1
+  86:	90 93 67 00 	sts	0x0067, r25
+  8a:	80 93 66 00 	sts	0x0066, r24
+  8e:	04 c0       	rjmp	.+8      	; 0x98 <__vector_10+0x42>
+	else frame_count=0;
+  90:	10 92 67 00 	sts	0x0067, r1
+  94:	10 92 66 00 	sts	0x0066, r1
+	
+	if(light_up>0){
+  98:	80 91 62 00 	lds	r24, 0x0062
+  9c:	90 91 63 00 	lds	r25, 0x0063
+  a0:	a0 91 64 00 	lds	r26, 0x0064
+  a4:	b0 91 65 00 	lds	r27, 0x0065
+  a8:	00 97       	sbiw	r24, 0x00	; 0
+  aa:	a1 05       	cpc	r26, r1
+  ac:	b1 05       	cpc	r27, r1
+  ae:	81 f1       	breq	.+96     	; 0x110 <__vector_10+0xba>
+		light_up-=1;
+  b0:	80 91 62 00 	lds	r24, 0x0062
+  b4:	90 91 63 00 	lds	r25, 0x0063
+  b8:	a0 91 64 00 	lds	r26, 0x0064
+  bc:	b0 91 65 00 	lds	r27, 0x0065
+  c0:	01 97       	sbiw	r24, 0x01	; 1
+  c2:	a1 09       	sbc	r26, r1
+  c4:	b1 09       	sbc	r27, r1
+  c6:	80 93 62 00 	sts	0x0062, r24
+  ca:	90 93 63 00 	sts	0x0063, r25
+  ce:	a0 93 64 00 	sts	0x0064, r26
+  d2:	b0 93 65 00 	sts	0x0065, r27
+		if(led_brightness > frame_count){
+  d6:	20 91 68 00 	lds	r18, 0x0068
+  da:	30 91 69 00 	lds	r19, 0x0069
+  de:	80 91 66 00 	lds	r24, 0x0066
+  e2:	90 91 67 00 	lds	r25, 0x0067
+  e6:	82 17       	cp	r24, r18
+  e8:	93 07       	cpc	r25, r19
+  ea:	94 f4       	brge	.+36     	; 0x110 <__vector_10+0xba>
+			switch (LED)
+  ec:	80 91 60 00 	lds	r24, 0x0060
+  f0:	90 91 61 00 	lds	r25, 0x0061
+  f4:	82 30       	cpi	r24, 0x02	; 2
+  f6:	91 05       	cpc	r25, r1
+  f8:	39 f0       	breq	.+14     	; 0x108 <__vector_10+0xb2>
+  fa:	83 30       	cpi	r24, 0x03	; 3
+  fc:	91 05       	cpc	r25, r1
+  fe:	31 f0       	breq	.+12     	; 0x10c <__vector_10+0xb6>
+ 100:	01 97       	sbiw	r24, 0x01	; 1
+ 102:	49 f4       	brne	.+18     	; 0x116 <__vector_10+0xc0>
+			{
+				case 1:
+					LED1_ON();
+ 104:	c0 9a       	sbi	0x18, 0	; 24
+ 106:	07 c0       	rjmp	.+14     	; 0x116 <__vector_10+0xc0>
+					break;
+				case 2:
+					LED2_ON();
+ 108:	c1 9a       	sbi	0x18, 1	; 24
+ 10a:	05 c0       	rjmp	.+10     	; 0x116 <__vector_10+0xc0>
+					break;
+				case 3:
+					LED3_ON();
+ 10c:	c3 9a       	sbi	0x18, 3	; 24
+ 10e:	03 c0       	rjmp	.+6      	; 0x116 <__vector_10+0xc0>
+			LED2_OFF();
+			LED3_OFF();
+		}
+	}
+	else{
+		LED1_OFF();
+ 110:	c0 98       	cbi	0x18, 0	; 24
+		LED2_OFF();
+ 112:	c1 98       	cbi	0x18, 1	; 24
+		LED3_OFF();
+ 114:	c3 98       	cbi	0x18, 3	; 24
+	}
+	sei();
+ 116:	78 94       	sei
+}
+ 118:	bf 91       	pop	r27
+ 11a:	af 91       	pop	r26
+ 11c:	9f 91       	pop	r25
+ 11e:	8f 91       	pop	r24
+ 120:	3f 91       	pop	r19
+ 122:	2f 91       	pop	r18
+ 124:	0f 90       	pop	r0
+ 126:	0f be       	out	0x3f, r0	; 63
+ 128:	0f 90       	pop	r0
+ 12a:	1f 90       	pop	r1
+ 12c:	18 95       	reti
+
+0000012e <main>:
+
+int main (void)
+{
+ 12e:	ef 92       	push	r14
+ 130:	ff 92       	push	r15
+ 132:	0f 93       	push	r16
+ 134:	1f 93       	push	r17
+void ioinit (void) 
+{
+
+	//Set up the I/O
+    //1 = output, 0 = input
+	DDRB = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); //Enable the LED pins as outputs
+ 136:	8f e0       	ldi	r24, 0x0F	; 15
+ 138:	87 bb       	out	0x17, r24	; 23
+
+	TCCR0A=(1<<WGM01);	//Clear timer on Compare
+ 13a:	82 e0       	ldi	r24, 0x02	; 2
+ 13c:	8a bd       	out	0x2a, r24	; 42
+	TCCR0B=(1<<CS01); //Divide Clock(8MHZ) by 8
+ 13e:	83 bf       	out	0x33, r24	; 51
+	OCR0A=30;	//Set Interrupt frequency to Timer(1mHz)/100=10kHz
+ 140:	8e e1       	ldi	r24, 0x1E	; 30
+ 142:	89 bd       	out	0x29, r24	; 41
+	TIMSK = (1<<OCIE0A);		//Interrupt when timer0=OCA
+ 144:	80 e1       	ldi	r24, 0x10	; 16
+ 146:	89 bf       	out	0x39, r24	; 57
+	
+	sei(); //Enable interrupts	//Enable Interrupts
+ 148:	78 94       	sei
+}
+
+int main (void)
+{
+	ioinit();
+	light_up=0;
+ 14a:	10 92 62 00 	sts	0x0062, r1
+ 14e:	10 92 63 00 	sts	0x0063, r1
+ 152:	10 92 64 00 	sts	0x0064, r1
+ 156:	10 92 65 00 	sts	0x0065, r1
+		for(int s_led=2; s_led<5; s_led++)
+		{
+			LED=s_led;
+			for(int brightness=0; brightness <= 100; brightness+=5)
+			{
+				light_up=2500;
+ 15a:	84 ec       	ldi	r24, 0xC4	; 196
+ 15c:	e8 2e       	mov	r14, r24
+ 15e:	89 e0       	ldi	r24, 0x09	; 9
+ 160:	f8 2e       	mov	r15, r24
+ 162:	01 2d       	mov	r16, r1
+ 164:	11 2d       	mov	r17, r1
+{
+	ioinit();
+	light_up=0;
+
+	while(1){
+		LED4_ON();
+ 166:	c2 9a       	sbi	0x18, 2	; 24
+ 168:	42 e0       	ldi	r20, 0x02	; 2
+ 16a:	50 e0       	ldi	r21, 0x00	; 0
+		for(int s_led=2; s_led<5; s_led++)
+		{
+			LED=s_led;
+ 16c:	50 93 61 00 	sts	0x0061, r21
+ 170:	40 93 60 00 	sts	0x0060, r20
+ 174:	20 e0       	ldi	r18, 0x00	; 0
+ 176:	30 e0       	ldi	r19, 0x00	; 0
+			for(int brightness=0; brightness <= 100; brightness+=5)
+			{
+				light_up=2500;
+ 178:	e0 92 62 00 	sts	0x0062, r14
+ 17c:	f0 92 63 00 	sts	0x0063, r15
+ 180:	00 93 64 00 	sts	0x0064, r16
+ 184:	10 93 65 00 	sts	0x0065, r17
+				led_brightness=brightness;
+ 188:	30 93 69 00 	sts	0x0069, r19
+ 18c:	20 93 68 00 	sts	0x0068, r18
+				while(light_up>0);
+ 190:	80 91 62 00 	lds	r24, 0x0062
+ 194:	90 91 63 00 	lds	r25, 0x0063
+ 198:	a0 91 64 00 	lds	r26, 0x0064
+ 19c:	b0 91 65 00 	lds	r27, 0x0065
+ 1a0:	00 97       	sbiw	r24, 0x00	; 0
+ 1a2:	a1 05       	cpc	r26, r1
+ 1a4:	b1 05       	cpc	r27, r1
+ 1a6:	a1 f7       	brne	.-24     	; 0x190 <main+0x62>
+	while(1){
+		LED4_ON();
+		for(int s_led=2; s_led<5; s_led++)
+		{
+			LED=s_led;
+			for(int brightness=0; brightness <= 100; brightness+=5)
+ 1a8:	2b 5f       	subi	r18, 0xFB	; 251
+ 1aa:	3f 4f       	sbci	r19, 0xFF	; 255
+ 1ac:	29 36       	cpi	r18, 0x69	; 105
+ 1ae:	31 05       	cpc	r19, r1
+ 1b0:	19 f7       	brne	.-58     	; 0x178 <main+0x4a>
+ 1b2:	24 e6       	ldi	r18, 0x64	; 100
+ 1b4:	30 e0       	ldi	r19, 0x00	; 0
+				led_brightness=brightness;
+				while(light_up>0);
+			}
+			for(int brightness=100; brightness >= 0; brightness-=5)
+			{
+				light_up=2500;
+ 1b6:	e0 92 62 00 	sts	0x0062, r14
+ 1ba:	f0 92 63 00 	sts	0x0063, r15
+ 1be:	00 93 64 00 	sts	0x0064, r16
+ 1c2:	10 93 65 00 	sts	0x0065, r17
+				led_brightness=brightness;
+ 1c6:	30 93 69 00 	sts	0x0069, r19
+ 1ca:	20 93 68 00 	sts	0x0068, r18
+				while(light_up>0);
+ 1ce:	80 91 62 00 	lds	r24, 0x0062
+ 1d2:	90 91 63 00 	lds	r25, 0x0063
+ 1d6:	a0 91 64 00 	lds	r26, 0x0064
+ 1da:	b0 91 65 00 	lds	r27, 0x0065
+ 1de:	00 97       	sbiw	r24, 0x00	; 0
+ 1e0:	a1 05       	cpc	r26, r1
+ 1e2:	b1 05       	cpc	r27, r1
+ 1e4:	a1 f7       	brne	.-24     	; 0x1ce <main+0xa0>
+			{
+				light_up=2500;
+				led_brightness=brightness;
+				while(light_up>0);
+			}
+			for(int brightness=100; brightness >= 0; brightness-=5)
+ 1e6:	25 50       	subi	r18, 0x05	; 5
+ 1e8:	30 40       	sbci	r19, 0x00	; 0
+ 1ea:	8f ef       	ldi	r24, 0xFF	; 255
+ 1ec:	2b 3f       	cpi	r18, 0xFB	; 251
+ 1ee:	38 07       	cpc	r19, r24
+ 1f0:	11 f7       	brne	.-60     	; 0x1b6 <main+0x88>
+	ioinit();
+	light_up=0;
+
+	while(1){
+		LED4_ON();
+		for(int s_led=2; s_led<5; s_led++)
+ 1f2:	4f 5f       	subi	r20, 0xFF	; 255
+ 1f4:	5f 4f       	sbci	r21, 0xFF	; 255
+ 1f6:	45 30       	cpi	r20, 0x05	; 5
+ 1f8:	51 05       	cpc	r21, r1
+ 1fa:	09 f0       	breq	.+2      	; 0x1fe <main+0xd0>
+ 1fc:	b7 cf       	rjmp	.-146    	; 0x16c <main+0x3e>
+				light_up=2500;
+				led_brightness=brightness;
+				while(light_up>0);
+			}		
+		}
+		LED4_OFF();
+ 1fe:	c2 98       	cbi	0x18, 2	; 24
+ 200:	40 e0       	ldi	r20, 0x00	; 0
+ 202:	50 e0       	ldi	r21, 0x00	; 0
+ 204:	14 c0       	rjmp	.+40     	; 0x22e <main+0x100>
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+      for ( z = 0 ; z < 10 ; z++){
+        asm volatile ("nop");
+ 206:	00 00       	nop
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+      for ( z = 0 ; z < 10 ; z++){
+ 208:	8f 5f       	subi	r24, 0xFF	; 255
+ 20a:	8a 30       	cpi	r24, 0x0A	; 10
+ 20c:	e1 f7       	brne	.-8      	; 0x206 <main+0xd8>
+//General short delays
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+ 20e:	9f 5f       	subi	r25, 0xFF	; 255
+ 210:	9a 30       	cpi	r25, 0x0A	; 10
+ 212:	11 f0       	breq	.+4      	; 0x218 <main+0xea>
+ 214:	80 e0       	ldi	r24, 0x00	; 0
+ 216:	f7 cf       	rjmp	.-18     	; 0x206 <main+0xd8>
+
+//General short delays
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+ 218:	21 50       	subi	r18, 0x01	; 1
+ 21a:	30 40       	sbci	r19, 0x00	; 0
+ 21c:	11 f0       	breq	.+4      	; 0x222 <main+0xf4>
+ 21e:	90 e0       	ldi	r25, 0x00	; 0
+ 220:	f9 cf       	rjmp	.-14     	; 0x214 <main+0xe6>
+				led_brightness=brightness;
+				while(light_up>0);
+			}		
+		}
+		LED4_OFF();
+		for(int i=0; i<8; i++)delay_ms(30000);
+ 222:	4f 5f       	subi	r20, 0xFF	; 255
+ 224:	5f 4f       	sbci	r21, 0xFF	; 255
+ 226:	48 30       	cpi	r20, 0x08	; 8
+ 228:	51 05       	cpc	r21, r1
+ 22a:	09 f4       	brne	.+2      	; 0x22e <main+0x100>
+ 22c:	9c cf       	rjmp	.-200    	; 0x166 <main+0x38>
+ 22e:	20 e3       	ldi	r18, 0x30	; 48
+ 230:	35 e7       	ldi	r19, 0x75	; 117
+ 232:	f5 cf       	rjmp	.-22     	; 0x21e <main+0xf0>
+
+00000234 <ioinit>:
+void ioinit (void) 
+{
+
+	//Set up the I/O
+    //1 = output, 0 = input
+	DDRB = (1<<LED1) | (1<<LED2) | (1<<LED3) | (1<<LED4); //Enable the LED pins as outputs
+ 234:	8f e0       	ldi	r24, 0x0F	; 15
+ 236:	87 bb       	out	0x17, r24	; 23
+
+	TCCR0A=(1<<WGM01);	//Clear timer on Compare
+ 238:	82 e0       	ldi	r24, 0x02	; 2
+ 23a:	8a bd       	out	0x2a, r24	; 42
+	TCCR0B=(1<<CS01); //Divide Clock(8MHZ) by 8
+ 23c:	83 bf       	out	0x33, r24	; 51
+	OCR0A=30;	//Set Interrupt frequency to Timer(1mHz)/100=10kHz
+ 23e:	8e e1       	ldi	r24, 0x1E	; 30
+ 240:	89 bd       	out	0x29, r24	; 41
+	TIMSK = (1<<OCIE0A);		//Interrupt when timer0=OCA
+ 242:	80 e1       	ldi	r24, 0x10	; 16
+ 244:	89 bf       	out	0x39, r24	; 57
+	
+	sei(); //Enable interrupts	//Enable Interrupts
+ 246:	78 94       	sei
+}
+ 248:	08 95       	ret
+
+0000024a <delay_ms>:
+
+//General short delays
+void delay_ms(uint16_t x)
+{
+ 24a:	0a c0       	rjmp	.+20     	; 0x260 <__stack+0x1>
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+      for ( z = 0 ; z < 10 ; z++){
+        asm volatile ("nop");
+ 24c:	00 00       	nop
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+      for ( z = 0 ; z < 10 ; z++){
+ 24e:	2f 5f       	subi	r18, 0xFF	; 255
+ 250:	2a 30       	cpi	r18, 0x0A	; 10
+ 252:	e1 f7       	brne	.-8      	; 0x24c <delay_ms+0x2>
+//General short delays
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+    for ( y = 0 ; y < 10 ; y++){
+ 254:	3f 5f       	subi	r19, 0xFF	; 255
+ 256:	3a 30       	cpi	r19, 0x0A	; 10
+ 258:	11 f0       	breq	.+4      	; 0x25e <delay_ms+0x14>
+ 25a:	20 e0       	ldi	r18, 0x00	; 0
+ 25c:	f7 cf       	rjmp	.-18     	; 0x24c <delay_ms+0x2>
+
+//General short delays
+void delay_ms(uint16_t x)
+{
+  uint8_t y, z;
+  for ( ; x > 0 ; x--){
+ 25e:	01 97       	sbiw	r24, 0x01	; 1
+ 260:	00 97       	sbiw	r24, 0x00	; 0
+ 262:	11 f0       	breq	.+4      	; 0x268 <__stack+0x9>
+ 264:	30 e0       	ldi	r19, 0x00	; 0
+ 266:	f9 cf       	rjmp	.-14     	; 0x25a <delay_ms+0x10>
+ 268:	08 95       	ret
+
+0000026a <_exit>:
+ 26a:	f8 94       	cli
+
+0000026c <__stop_program>:
+ 26c:	ff cf       	rjmp	.-2      	; 0x26c <__stop_program>

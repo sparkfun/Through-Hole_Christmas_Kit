@@ -1,0 +1,417 @@
+   1               		.file	"ChristmasKit.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	__vector_10
+  18               	__vector_10:
+  19               	.LFB5:
+  20               	.LM1:
+  21 0000 1F92      		push __zero_reg__
+  22 0002 0F92      		push r0
+  23 0004 0FB6      		in r0,__SREG__
+  24 0006 0F92      		push r0
+  25 0008 1124      		clr __zero_reg__
+  26 000a 2F93      		push r18
+  27 000c 3F93      		push r19
+  28 000e 8F93      		push r24
+  29 0010 9F93      		push r25
+  30 0012 AF93      		push r26
+  31 0014 BF93      		push r27
+  32               	/* prologue: Signal */
+  33               	/* frame size = 0 */
+  34               	.LM2:
+  35               	/* #APP */
+  36               	 ;  66 "ChristmasKit.c" 1
+  37 0016 F894      		cli
+  38               	 ;  0 "" 2
+  39               	.LM3:
+  40               	/* #NOAPP */
+  41 0018 8091 0000 		lds r24,frame_count
+  42 001c 9091 0000 		lds r25,(frame_count)+1
+  43 0020 8F5F      		subi r24,lo8(511)
+  44 0022 9140      		sbci r25,hi8(511)
+  45 0024 04F4      		brge .L2
+  46 0026 8091 0000 		lds r24,frame_count
+  47 002a 9091 0000 		lds r25,(frame_count)+1
+  48 002e 0196      		adiw r24,1
+  49 0030 9093 0000 		sts (frame_count)+1,r25
+  50 0034 8093 0000 		sts frame_count,r24
+  51 0038 00C0      		rjmp .L3
+  52               	.L2:
+  53               	.LM4:
+  54 003a 1092 0000 		sts (frame_count)+1,__zero_reg__
+  55 003e 1092 0000 		sts frame_count,__zero_reg__
+  56               	.L3:
+  57               	.LM5:
+  58 0042 8091 0000 		lds r24,light_up
+  59 0046 9091 0000 		lds r25,(light_up)+1
+  60 004a A091 0000 		lds r26,(light_up)+2
+  61 004e B091 0000 		lds r27,(light_up)+3
+  62 0052 0097      		sbiw r24,0
+  63 0054 A105      		cpc r26,__zero_reg__
+  64 0056 B105      		cpc r27,__zero_reg__
+  65 0058 01F0      		breq .L4
+  66               	.LM6:
+  67 005a 8091 0000 		lds r24,light_up
+  68 005e 9091 0000 		lds r25,(light_up)+1
+  69 0062 A091 0000 		lds r26,(light_up)+2
+  70 0066 B091 0000 		lds r27,(light_up)+3
+  71 006a 0197      		sbiw r24,1
+  72 006c A109      		sbc r26,__zero_reg__
+  73 006e B109      		sbc r27,__zero_reg__
+  74 0070 8093 0000 		sts light_up,r24
+  75 0074 9093 0000 		sts (light_up)+1,r25
+  76 0078 A093 0000 		sts (light_up)+2,r26
+  77 007c B093 0000 		sts (light_up)+3,r27
+  78               	.LM7:
+  79 0080 2091 0000 		lds r18,led_brightness
+  80 0084 3091 0000 		lds r19,(led_brightness)+1
+  81 0088 8091 0000 		lds r24,frame_count
+  82 008c 9091 0000 		lds r25,(frame_count)+1
+  83 0090 8217      		cp r24,r18
+  84 0092 9307      		cpc r25,r19
+  85 0094 04F4      		brge .L4
+  86               	.LM8:
+  87 0096 8091 0000 		lds r24,LED
+  88 009a 9091 0000 		lds r25,(LED)+1
+  89 009e 8230      		cpi r24,2
+  90 00a0 9105      		cpc r25,__zero_reg__
+  91 00a2 01F0      		breq .L8
+  92 00a4 8330      		cpi r24,3
+  93 00a6 9105      		cpc r25,__zero_reg__
+  94 00a8 01F0      		breq .L9
+  95 00aa 0197      		sbiw r24,1
+  96 00ac 01F4      		brne .L6
+  97               	.LM9:
+  98 00ae C09A      		sbi 56-32,0
+  99 00b0 00C0      		rjmp .L6
+ 100               	.L8:
+ 101               	.LM10:
+ 102 00b2 C19A      		sbi 56-32,1
+ 103 00b4 00C0      		rjmp .L6
+ 104               	.L9:
+ 105               	.LM11:
+ 106 00b6 C39A      		sbi 56-32,3
+ 107 00b8 00C0      		rjmp .L6
+ 108               	.L4:
+ 109               	.LM12:
+ 110 00ba C098      		cbi 56-32,0
+ 111               	.LM13:
+ 112 00bc C198      		cbi 56-32,1
+ 113               	.LM14:
+ 114 00be C398      		cbi 56-32,3
+ 115               	.L6:
+ 116               	.LM15:
+ 117               	/* #APP */
+ 118               	 ;  99 "ChristmasKit.c" 1
+ 119 00c0 7894      		sei
+ 120               	 ;  0 "" 2
+ 121               	/* epilogue start */
+ 122               	.LM16:
+ 123               	/* #NOAPP */
+ 124 00c2 BF91      		pop r27
+ 125 00c4 AF91      		pop r26
+ 126 00c6 9F91      		pop r25
+ 127 00c8 8F91      		pop r24
+ 128 00ca 3F91      		pop r19
+ 129 00cc 2F91      		pop r18
+ 130 00ce 0F90      		pop r0
+ 131 00d0 0FBE      		out __SREG__,r0
+ 132 00d2 0F90      		pop r0
+ 133 00d4 1F90      		pop __zero_reg__
+ 134 00d6 1895      		reti
+ 135               	.LFE5:
+ 137               	.global	main
+ 139               	main:
+ 140               	.LFB6:
+ 141               	.LM17:
+ 142 00d8 EF92      		push r14
+ 143 00da FF92      		push r15
+ 144 00dc 0F93      		push r16
+ 145 00de 1F93      		push r17
+ 146               	/* prologue: function */
+ 147               	/* frame size = 0 */
+ 148               	.LBB10:
+ 149               	.LBB11:
+ 150               	.LM18:
+ 151 00e0 8FE0      		ldi r24,lo8(15)
+ 152 00e2 87BB      		out 55-32,r24
+ 153               	.LM19:
+ 154 00e4 82E0      		ldi r24,lo8(2)
+ 155 00e6 8ABD      		out 74-32,r24
+ 156               	.LM20:
+ 157 00e8 83BF      		out 83-32,r24
+ 158               	.LM21:
+ 159 00ea 8EE1      		ldi r24,lo8(30)
+ 160 00ec 89BD      		out 73-32,r24
+ 161               	.LM22:
+ 162 00ee 80E1      		ldi r24,lo8(16)
+ 163 00f0 89BF      		out 89-32,r24
+ 164               	.LM23:
+ 165               	/* #APP */
+ 166               	 ;  144 "ChristmasKit.c" 1
+ 167 00f2 7894      		sei
+ 168               	 ;  0 "" 2
+ 169               	/* #NOAPP */
+ 170               	.LBE11:
+ 171               	.LBE10:
+ 172               	.LM24:
+ 173 00f4 1092 0000 		sts light_up,__zero_reg__
+ 174 00f8 1092 0000 		sts (light_up)+1,__zero_reg__
+ 175 00fc 1092 0000 		sts (light_up)+2,__zero_reg__
+ 176 0100 1092 0000 		sts (light_up)+3,__zero_reg__
+ 177               	.LBB12:
+ 178               	.LBB13:
+ 179               	.LM25:
+ 180 0104 84EC      		ldi r24,lo8(2500)
+ 181 0106 E82E      		mov r14,r24
+ 182 0108 89E0      		ldi r24,hi8(2500)
+ 183 010a F82E      		mov r15,r24
+ 184 010c 012D      		mov r16,__zero_reg__
+ 185 010e 112D      		mov r17,__zero_reg__
+ 186               	.LVL0:
+ 187               	.L22:
+ 188               	.LBE13:
+ 189               	.LBE12:
+ 190               	.LM26:
+ 191 0110 C29A      		sbi 56-32,2
+ 192 0112 42E0      		ldi r20,lo8(2)
+ 193 0114 50E0      		ldi r21,hi8(2)
+ 194               	.LVL1:
+ 195               	.L16:
+ 196               	.LBB16:
+ 197               	.LM27:
+ 198 0116 5093 0000 		sts (LED)+1,r21
+ 199 011a 4093 0000 		sts LED,r20
+ 200 011e 20E0      		ldi r18,lo8(0)
+ 201 0120 30E0      		ldi r19,hi8(0)
+ 202               	.LVL2:
+ 203               	.L13:
+ 204               	.LBB14:
+ 205               	.LM28:
+ 206 0122 E092 0000 		sts light_up,r14
+ 207 0126 F092 0000 		sts (light_up)+1,r15
+ 208 012a 0093 0000 		sts (light_up)+2,r16
+ 209 012e 1093 0000 		sts (light_up)+3,r17
+ 210               	.LM29:
+ 211 0132 3093 0000 		sts (led_brightness)+1,r19
+ 212 0136 2093 0000 		sts led_brightness,r18
+ 213               	.L12:
+ 214               	.LM30:
+ 215 013a 8091 0000 		lds r24,light_up
+ 216 013e 9091 0000 		lds r25,(light_up)+1
+ 217 0142 A091 0000 		lds r26,(light_up)+2
+ 218 0146 B091 0000 		lds r27,(light_up)+3
+ 219               	.LVL3:
+ 220 014a 0097      		sbiw r24,0
+ 221 014c A105      		cpc r26,__zero_reg__
+ 222 014e B105      		cpc r27,__zero_reg__
+ 223 0150 01F4      		brne .L12
+ 224               	.LM31:
+ 225 0152 2B5F      		subi r18,lo8(-(5))
+ 226 0154 3F4F      		sbci r19,hi8(-(5))
+ 227 0156 2936      		cpi r18,105
+ 228 0158 3105      		cpc r19,__zero_reg__
+ 229 015a 01F4      		brne .L13
+ 230 015c 24E6      		ldi r18,lo8(100)
+ 231 015e 30E0      		ldi r19,hi8(100)
+ 232               	.LVL4:
+ 233               	.L15:
+ 234               	.LBE14:
+ 235               	.LBB15:
+ 236               	.LM32:
+ 237 0160 E092 0000 		sts light_up,r14
+ 238 0164 F092 0000 		sts (light_up)+1,r15
+ 239 0168 0093 0000 		sts (light_up)+2,r16
+ 240 016c 1093 0000 		sts (light_up)+3,r17
+ 241               	.LM33:
+ 242 0170 3093 0000 		sts (led_brightness)+1,r19
+ 243 0174 2093 0000 		sts led_brightness,r18
+ 244               	.L14:
+ 245               	.LM34:
+ 246 0178 8091 0000 		lds r24,light_up
+ 247 017c 9091 0000 		lds r25,(light_up)+1
+ 248 0180 A091 0000 		lds r26,(light_up)+2
+ 249 0184 B091 0000 		lds r27,(light_up)+3
+ 250 0188 0097      		sbiw r24,0
+ 251 018a A105      		cpc r26,__zero_reg__
+ 252 018c B105      		cpc r27,__zero_reg__
+ 253 018e 01F4      		brne .L14
+ 254               	.LM35:
+ 255 0190 2550      		subi r18,lo8(-(-5))
+ 256 0192 3040      		sbci r19,hi8(-(-5))
+ 257 0194 8FEF      		ldi r24,hi8(-5)
+ 258 0196 2B3F      		cpi r18,lo8(-5)
+ 259 0198 3807      		cpc r19,r24
+ 260 019a 01F4      		brne .L15
+ 261               	.LBE15:
+ 262               	.LM36:
+ 263 019c 4F5F      		subi r20,lo8(-(1))
+ 264 019e 5F4F      		sbci r21,hi8(-(1))
+ 265 01a0 4530      		cpi r20,5
+ 266 01a2 5105      		cpc r21,__zero_reg__
+ 267 01a4 01F0      		breq .+2
+ 268 01a6 00C0      		rjmp .L16
+ 269               	.LBE16:
+ 270               	.LM37:
+ 271 01a8 C298      		cbi 56-32,2
+ 272 01aa 40E0      		ldi r20,lo8(0)
+ 273 01ac 50E0      		ldi r21,hi8(0)
+ 274               	.LVL5:
+ 275 01ae 00C0      		rjmp .L17
+ 276               	.LVL6:
+ 277               	.L18:
+ 278               	.LBB17:
+ 279               	.LBB18:
+ 280               	.LBB19:
+ 281               	.LM38:
+ 282               	/* #APP */
+ 283               	 ;  154 "ChristmasKit.c" 1
+ 284 01b0 0000      		nop
+ 285               	 ;  0 "" 2
+ 286               	.LM39:
+ 287               	/* #NOAPP */
+ 288 01b2 8F5F      		subi r24,lo8(-(1))
+ 289 01b4 8A30      		cpi r24,lo8(10)
+ 290 01b6 01F4      		brne .L18
+ 291               	.LM40:
+ 292 01b8 9F5F      		subi r25,lo8(-(1))
+ 293 01ba 9A30      		cpi r25,lo8(10)
+ 294 01bc 01F0      		breq .L19
+ 295               	.L21:
+ 296 01be 80E0      		ldi r24,lo8(0)
+ 297 01c0 00C0      		rjmp .L18
+ 298               	.L19:
+ 299               	.LM41:
+ 300 01c2 2150      		subi r18,lo8(-(-1))
+ 301 01c4 3040      		sbci r19,hi8(-(-1))
+ 302 01c6 01F0      		breq .L20
+ 303               	.L23:
+ 304 01c8 90E0      		ldi r25,lo8(0)
+ 305 01ca 00C0      		rjmp .L21
+ 306               	.L20:
+ 307               	.LBE19:
+ 308               	.LBE18:
+ 309               	.LM42:
+ 310 01cc 4F5F      		subi r20,lo8(-(1))
+ 311 01ce 5F4F      		sbci r21,hi8(-(1))
+ 312 01d0 4830      		cpi r20,8
+ 313 01d2 5105      		cpc r21,__zero_reg__
+ 314 01d4 01F4      		brne .+2
+ 315 01d6 00C0      		rjmp .L22
+ 316               	.LVL7:
+ 317               	.L17:
+ 318 01d8 20E3      		ldi r18,lo8(30000)
+ 319 01da 35E7      		ldi r19,hi8(30000)
+ 320               	.LVL8:
+ 321 01dc 00C0      		rjmp .L23
+ 322               	.LBE17:
+ 323               	.LFE6:
+ 325               	.global	ioinit
+ 327               	ioinit:
+ 328               	.LFB7:
+ 329               	.LM43:
+ 330               	/* prologue: function */
+ 331               	/* frame size = 0 */
+ 332               	.LM44:
+ 333 01de 8FE0      		ldi r24,lo8(15)
+ 334 01e0 87BB      		out 55-32,r24
+ 335               	.LM45:
+ 336 01e2 82E0      		ldi r24,lo8(2)
+ 337 01e4 8ABD      		out 74-32,r24
+ 338               	.LM46:
+ 339 01e6 83BF      		out 83-32,r24
+ 340               	.LM47:
+ 341 01e8 8EE1      		ldi r24,lo8(30)
+ 342 01ea 89BD      		out 73-32,r24
+ 343               	.LM48:
+ 344 01ec 80E1      		ldi r24,lo8(16)
+ 345 01ee 89BF      		out 89-32,r24
+ 346               	.LM49:
+ 347               	/* #APP */
+ 348               	 ;  144 "ChristmasKit.c" 1
+ 349 01f0 7894      		sei
+ 350               	 ;  0 "" 2
+ 351               	/* epilogue start */
+ 352               	.LM50:
+ 353               	/* #NOAPP */
+ 354 01f2 0895      		ret
+ 355               	.LFE7:
+ 357               	.global	delay_ms
+ 359               	delay_ms:
+ 360               	.LFB8:
+ 361               	.LM51:
+ 362               	.LVL9:
+ 363               	/* prologue: function */
+ 364               	/* frame size = 0 */
+ 365 01f4 00C0      		rjmp .L35
+ 366               	.LVL10:
+ 367               	.L36:
+ 368               	.LM52:
+ 369               	/* #APP */
+ 370               	 ;  154 "ChristmasKit.c" 1
+ 371 01f6 0000      		nop
+ 372               	 ;  0 "" 2
+ 373               	.LM53:
+ 374               	/* #NOAPP */
+ 375 01f8 2F5F      		subi r18,lo8(-(1))
+ 376 01fa 2A30      		cpi r18,lo8(10)
+ 377 01fc 01F4      		brne .L36
+ 378               	.LM54:
+ 379 01fe 3F5F      		subi r19,lo8(-(1))
+ 380 0200 3A30      		cpi r19,lo8(10)
+ 381 0202 01F0      		breq .L37
+ 382               	.L39:
+ 383 0204 20E0      		ldi r18,lo8(0)
+ 384 0206 00C0      		rjmp .L36
+ 385               	.L37:
+ 386               	.LM55:
+ 387 0208 0197      		sbiw r24,1
+ 388               	.LVL11:
+ 389               	.L35:
+ 390 020a 0097      		sbiw r24,0
+ 391 020c 01F0      		breq .L40
+ 392 020e 30E0      		ldi r19,lo8(0)
+ 393 0210 00C0      		rjmp .L39
+ 394               	.L40:
+ 395 0212 0895      		ret
+ 396               	.LFE8:
+ 398               	.global	light_up
+ 399               	.global	light_up
+ 400               		.section .bss
+ 403               	light_up:
+ 404 0000 0000 0000 		.skip 4,0
+ 405               	.global	frame_count
+ 406               	.global	frame_count
+ 409               	frame_count:
+ 410 0004 0000      		.skip 2,0
+ 411               	.global	LED
+ 412               		.data
+ 415               	LED:
+ 416 0000 0100      		.word	1
+ 417               		.comm led_brightness,2,1
+ 466               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 ChristmasKit.c
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:2      *ABS*:0000003f __SREG__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:3      *ABS*:0000003e __SP_H__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:4      *ABS*:0000003d __SP_L__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:5      *ABS*:00000034 __CCP__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:6      *ABS*:00000000 __tmp_reg__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:7      *ABS*:00000001 __zero_reg__
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:18     .text:00000000 __vector_10
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:409    .bss:00000004 frame_count
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:403    .bss:00000000 light_up
+                            *COM*:00000002 led_brightness
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:415    .data:00000000 LED
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:139    .text:000000d8 main
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:327    .text:000001de ioinit
+C:\DOCUME~1\Ryan\LOCALS~1\Temp/cc0AC9F2.s:359    .text:000001f4 delay_ms
+
+UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
