@@ -1,3 +1,5 @@
+**NOTE:** *This product has been retired from our catalog.*
+
 Through-Hole Christmas Kit
 ==========================
 
